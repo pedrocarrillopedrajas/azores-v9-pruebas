@@ -1,0 +1,6 @@
+AZORES V4 - Sincronizacion de estado de compras
+
+Al registrar una venta, el estado de la compra pasa a Vendido automaticamente.
+Los productos ya vendidos en versiones anteriores tambien se muestran como Vendido.
+Se mantiene la misma clave de almacenamiento local de versiones anteriores.
+IMPORTANTE: Los datos se guardan en el navegador y pueden depender de la ruta de apertura. Conserva una copia de la version anterior y sus datos hasta verificar el funcionamiento.

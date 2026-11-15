@@ -1,0 +1,9 @@
+AZORES V7.5 — COPIAS DE SEGURIDAD
+
+Pulsa Descargar copia y guarda el archivo .json fuera de la carpeta de AZORES, preferiblemente también en otra unidad o nube de confianza. El archivo incluye productos, fotos, ventas, envíos, cuentas y aportaciones.
+
+Para restaurar, pulsa Restaurar copia, selecciona el archivo .json y confirma. ATENCIÓN: la restauración sustituye los datos actuales del navegador; descarga una copia de estos antes.
+
+No hay copias automáticas, sincronización entre dispositivos ni protección con contraseña. El archivo de copia contiene los datos sin cifrar: guárdalo en un lugar privado. No borres datos del navegador antes de comprobar la copia.
+
+Si abres AZORES desde una carpeta diferente o un navegador distinto, puede que no aparezcan tus datos previos: abre primero la versión anterior, descarga una copia y restáurala en esta.

@@ -1,0 +1,28 @@
+AZORES - PROTOTIPO INICIAL
+
+Qué incluye:
+- Diseño adaptable a ordenador y móvil.
+- Seis secciones de navegación.
+- Alta de productos en Compras/Inventario.
+- Fotografía opcional del producto.
+- Datos guardados localmente en el navegador.
+
+IMPORTANTE:
+Esta versión es solo un prototipo visual y funcional local.
+No sincroniza entre dispositivos, no tiene usuarios/contraseña y no está conectada a una base de datos en la nube.
+No introduzcas aquí datos definitivos del negocio.
+
+Para probar en ordenador:
+1. Descomprime la carpeta.
+2. Abre index.html con un navegador moderno.
+3. Añade uno o dos productos de prueba.
+4. Comprueba cómo aparecen en Compras e Inventario.
+
+Para instalar como PWA en el móvil:
+Será necesario publicar estos archivos en un alojamiento HTTPS. Eso lo haremos después, junto con la conexión a la nube.
+
+Siguiente fase:
+- Revisar campos del Excel original.
+- Diseñar base de datos y copias de seguridad.
+- Conectar almacenamiento de productos e imágenes.
+- Completar ventas, envíos, cuentas y beneficios.

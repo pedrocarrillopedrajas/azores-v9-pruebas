@@ -1,0 +1,12 @@
+AZORES V8.0 — Supabase
+
+1. Probar primero en un repositorio GitHub Pages de pruebas (no sustituir la versión publicada sin comprobar).
+2. Iniciar sesión con el usuario creado en Supabase.
+3. Añadir producto de prueba; esperar al indicador ✓ Sincronizado.
+4. Abrir en otro dispositivo, iniciar sesión y verificar producto.
+5. Probar copia JSON, venta, envíos y cuentas.
+6. Si hay cambios sin sincronizar, pulsar Reintentar antes de cerrar.
+7. Evitar editar en dos dispositivos simultáneamente (último guardado prevalece).
+8. Nunca publicar contraseñas ni claves secretas. La publishable key es pública y RLS protege cada fila.
+9. Las fotos se almacenan como datos base64 dentro del JSON; usar fotos pequeñas.
+10. La app requiere conexión para autenticarse y sincronizar.

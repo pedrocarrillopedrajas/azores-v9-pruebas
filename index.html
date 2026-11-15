@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#163F36">
+  <meta name="description" content="AZORES - Gestión de compraventa">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+  <title>AZORES · Gestión</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><img class="brand-logo" src="logo-azores.jpg" alt="Logo AZORES"><div><strong>AZORES</strong><small>GESTIÓN DE COMPRAVENTA</small></div></div>
+    <span class="prototype-tag">GESTIÓN PRIVADA</span>
+  </header>
+  <section id="loginPanel" class="login-panel">
+    <div class="login-card"><img class="login-logo" src="logo-azores.jpg" alt="Logo AZORES"><h1>Entrar en AZORES</h1>
+    <p>Accede con el usuario privado que creaste en Supabase.</p>
+    <form id="loginForm"><label>Correo electrónico<input type="email" name="email" autocomplete="username" required></label>
+    <label>Contraseña<input type="password" name="password" autocomplete="current-password" required></label>
+    <button class="primary" type="submit" id="loginButton">Entrar</button></form><p id="loginError" role="alert"></p></div>
+  </section>
+  <main class="shell" id="appShell" hidden>
+    <div class="cloud-bar"><span id="cloudStatus" role="status">Conectando…</span><div class="action-group"><button type="button" class="secondary" id="retrySync">Reintentar</button><button type="button" class="secondary" id="logoutButton">Cerrar sesión</button></div></div>
+    <section class="welcome">
+      <div><p class="eyebrow">TU NEGOCIO, EN ORDEN</p><h1>Panel principal</h1><p class="muted">Todo lo importante de AZORES, de un vistazo.</p></div>
+      <button class="primary" id="newProductTop">＋ Añadir producto</button>
+    </section>
+    <div class="notice"><strong>Datos en Supabase:</strong> comprueba el indicador de sincronización antes de cerrar. Conserva copias JSON periódicas. Si dos dispositivos editan a la vez, el último guardado puede prevalecer.</div>
+    <section class="backup-panel" aria-label="Protección de datos"><div><strong>Protección de datos</strong><p>Guarda una copia de todas las operaciones y cuentas, incluidas las fotos. Puedes restaurarla más adelante.</p></div><div class="action-group"><button type="button" class="primary" id="exportBackup">Descargar copia</button><button type="button" class="secondary" id="importBackup">Restaurar copia</button><input type="file" id="backupFile" accept=".json,application/json" hidden></div></section>
+    <section class="stats" id="stats">
+      <article class="stat"><span>Dinero disponible</span><strong id="cash">0,00 €</strong><small>Saldo conjunto de Vinted</small></article>
+      <article class="stat"><span>Productos en inventario</span><strong id="stock">0</strong><small>Compras aún no vendidas</small></article>
+      <article class="stat"><span>Ventas registradas</span><strong id="sales">0</strong><small>Operaciones vendidas</small></article>
+      <article class="stat"><span>Beneficio generado</span><strong id="profit">0,00 €</strong><small>Reparto 60 % / 40 %</small></article>
+    </section>
+    <section class="content-card">
+      <div class="section-heading"><div><p class="eyebrow">GESTIÓN</p><h2 id="sectionTitle">Inventario</h2></div><button class="primary" id="newProduct">＋ Añadir producto</button></div>
+      <nav class="tabs" aria-label="Secciones">
+        <button data-tab="Compras">Compras</button><button class="active" data-tab="Inventario">Inventario</button><button data-tab="Ventas">Ventas</button><button data-tab="Envíos">Envíos</button><button data-tab="Cuentas">Cuentas</button><button data-tab="Beneficios">Beneficios</button>
+      </nav>
+      <div id="view"></div>
+    </section>
+    <footer>AZORES · Versión 9.0 · Diseñado para ordenador y móvil</footer>
+  </main>
+  <dialog id="productDialog">
+    <form id="productForm" method="dialog">
+      <div class="dialog-head"><div><p class="eyebrow">INVENTARIO</p><h2 id="dialogTitle">Nuevo producto</h2></div><button type="button" class="close" id="closeDialog">×</button></div>
+      <label>Nombre o descripción<input name="name" required maxlength="100" placeholder="Ej. Botas Bimani"></label>
+      <div class="form-grid">
+        <label>Fecha de compra<input name="purchaseDate" type="date"></label>
+        <label>Precio de compra (€)<input name="purchasePrice" type="number" min="0" step="0.01" placeholder="0,00"></label>
+      </div>
+      <div class="form-grid">
+        <label>Origen / plataforma<input name="origin" placeholder="Ej. Vinted"></label>
+        <label>Cuenta que paga<select name="account"><option value="">Sin especificar</option><option>Aurora</option><option>Pedro</option><option>Cuenta Aurora</option><option>Cuenta Pedro</option></select></label>
+      </div>
+      <label>Forma de pago<select name="purchaseMethod"><option value="Vinted">Saldo de Vinted</option><option value="Personal">Dinero personal (aportación de capital)</option></select></label>
+      <label>Estado del producto<select name="status"><option>Por recibir</option><option>Por subir</option><option selected>Sin vender</option><option>Vendido</option></select></label>
+      <label class="photo-picker">Fotografía del producto <span>(opcional)</span><input name="photo" type="file" accept="image/*" capture="environment"><small>Una foto pequeña para reconocerlo en el inventario.</small></label>
+      <div id="photoPreview" class="photo-preview"></div>
+      <div class="dialog-actions"><button type="button" class="secondary" id="cancelDialog">Cancelar</button><button type="submit" class="primary" id="saveProductButton">Guardar producto</button></div>
+    </form>
+  </dialog>
+  <dialog id="saleDialog">
+    <form id="saleForm">
+      <div class="dialog-head"><div><p class="eyebrow">VENTAS</p><h2 id="saleDialogTitle">Registrar venta</h2></div><button type="button" class="close" id="closeSaleDialog">×</button></div>
+      <label>Producto del inventario<select name="productId" id="saleProduct" required></select></label>
+      <div class="form-grid"><label>Fecha de venta<input type="date" name="saleDate" required></label><label>Precio de venta (€)<input type="number" name="salePrice" min="0" step="0.01" required></label></div>
+      <div class="form-grid"><label>Comprador / cuenta<input name="buyer" placeholder="Ej. Usuario Vinted"></label><label>Estado del cobro<select name="paymentStatus"><option>Pendiente de cobro</option><option>Cobrado</option></select></label></div>
+      <label>Cuenta Vinted que recibe el cobro<select name="receivingAccount" required><option value="">Seleccionar cuenta</option><option>Aurora</option><option>Pedro</option></select></label>
+      <div class="sale-summary" id="saleSummary">Selecciona un producto e indica el precio de venta.</div>
+      <p class="sale-help">El producto dejará de aparecer en el inventario disponible. Podrás editar la venta después.</p>
+      <div class="dialog-actions"><button type="button" class="secondary" id="cancelSaleDialog">Cancelar</button><button type="submit" class="primary">Guardar venta</button></div>
+    </form>
+  </dialog>
+  <dialog id="shippingDialog">
+    <form id="shippingForm">
+      <div class="dialog-head"><div><p class="eyebrow">ENVÍOS</p><h2>Editar envío</h2></div><button type="button" class="close" id="closeShippingDialog">×</button></div>
+      <p id="shippingProductName" class="muted"></p>
+      <label>Transportista<input name="carrier" maxlength="80" placeholder="Ej. InPost, Correos, SEUR"></label>
+      <label>Número de seguimiento<input name="trackingNumber" maxlength="120" placeholder="Código del paquete"></label>
+      <label>Enlace de seguimiento<input name="trackingUrl" type="url" placeholder="https://..."></label>
+      <div class="dialog-actions"><button type="button" class="secondary" id="cancelShippingDialog">Cancelar</button><button type="submit" class="primary">Guardar envío</button></div>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>

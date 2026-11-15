@@ -1,0 +1,5 @@
+AZORES V5 - Anulación de ventas
+
+En Ventas, pulsa «Anular venta» y confirma. El producto vuelve a Inventario, recupera su estado anterior en Compras y deja de contabilizarse su beneficio.
+
+La aplicación utiliza almacenamiento local del navegador. Conserva la V4 como copia de seguridad y prueba la V5 con productos de prueba antes de usar datos reales.

@@ -1,0 +1,7 @@
+AZORES V9 — DISEÑO VERDE ELEGANTE
+
+Se han actualizado los colores, la cabecera, el inicio de sesión y los iconos. La lógica de app.js y la conexión Supabase permanecen sin cambios.
+
+IMPORTANTE: Este ZIP no modifica la app publicada. Antes de publicar, haz una copia JSON de los datos. Para probar sin riesgo de afectar los datos reales, no uses esta versión para editar operaciones en una publicación conectada a la misma cuenta de Supabase.
+
+Para desplegar, subir los archivos a la raíz del repositorio GitHub Pages correspondiente. El cambio del icono de iPhone puede requerir eliminar el acceso directo y añadirlo de nuevo.

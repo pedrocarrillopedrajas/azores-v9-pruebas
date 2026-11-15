@@ -1,0 +1,3 @@
+AZORES V3 - Ventas conectadas con Inventario.
+Abre index.html para probar. Registra una compra y pulsa Vender en Inventario, o Registrar venta en Ventas.
+Los datos se guardan localmente en el navegador (no sincronizados). Mantén una copia de seguridad de la versión anterior; el almacenamiento de archivos locales puede variar entre navegadores o ubicaciones.

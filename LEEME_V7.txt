@@ -1,0 +1,11 @@
+AZORES V7 — Cuentas y Beneficios
+
+Se mantiene la clave de almacenamiento local de productos de versiones anteriores.
+Los saldos de partida se configuran en Cuentas, sin duplicar ventas ya registradas.
+Compras: seleccionar forma de pago y cuenta pagadora.
+Ventas: seleccionar cuenta receptora y estado del cobro.
+Una venta pendiente no suma al saldo disponible.
+Las compras personales se contabilizan como aportaciones, sin restar saldo Vinted.
+Los saldos son cálculos de prueba y no deben utilizarse como contabilidad definitiva.
+Importante: una compra anterior a V7 sin forma de pago se interpreta como pagada con Vinted; revisar antes de usar cifras reales.
+No hay sincronización ni copia de seguridad automática.

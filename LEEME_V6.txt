@@ -1,0 +1,2 @@
+AZORES V6 — Envíos automáticos y editables.
+Al registrar una venta se crea el envío pendiente; entra en Envíos y pulsa Editar envío. Al anular la venta se retira su envío. Los datos se guardan en el almacenamiento local del navegador, sin sincronización entre dispositivos. Usa datos de prueba.

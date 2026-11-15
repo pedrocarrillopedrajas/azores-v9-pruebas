@@ -1,0 +1,1 @@
+AZORES V7.3: Se elimina la columna Estado de Envíos y el selector de estado al editar. Se conserva Ver seguimiento como enlace directo al transportista. Resto de funciones y almacenamiento sin cambios.
