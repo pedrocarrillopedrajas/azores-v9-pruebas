@@ -1,0 +1,1 @@
+AZORES V9.1: boton Eliminar para compras sin venta, con confirmacion y sincronizacion Supabase. No elimina compras vendidas; primero hay que anular la venta. Subir archivos a repositorio de pruebas V9, manteniendo copia de seguridad y V8 sin cambios.

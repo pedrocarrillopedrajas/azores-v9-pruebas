@@ -1,0 +1,5 @@
+AZORES V9.2 — Fotos en Ventas
+
+La sección Ventas muestra automáticamente la fotografía ya guardada del producto, junto a su nombre, sin duplicar archivos ni modificar los datos de Supabase.
+
+Para publicar: sustituir los archivos de la versión anterior en el repositorio GitHub Pages conservando la configuración actual.
