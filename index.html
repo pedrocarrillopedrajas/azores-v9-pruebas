@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#163F36">
+  <script>try{if(localStorage.getItem("azores-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
   <meta name="description" content="AZORES - Gestión de compraventa">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon-192.png" type="image/png">
@@ -12,8 +13,20 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><img class="brand-logo" src="logo-azores.jpg" alt="Logo AZORES"><div><strong>AZORES</strong><small>GESTIÓN DE COMPRAVENTA</small></div></div>
-    <span class="prototype-tag">GESTIÓN PRIVADA</span>
+    <div class="brand"><img class="brand-logo" src="logo-azores.jpg" alt="Logo AZORES"><div class="brand-text"><div class="brand-title"><strong>AZORES</strong><svg class="spain-flag" viewBox="0 0 30 20" role="img" aria-label="Bandera de España" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" rx="1" fill="#AA151B"/><path d="M0 5h30v10H0z" fill="#F1BF00"/></svg></div><span class="spain-stripe" aria-hidden="true"></span><small>GESTIÓN DE COMPRAVENTA</small></div></div>
+    <div class="header-actions"><button type="button" id="azThemeToggle" class="az-theme-toggle" aria-label="Activar modo oscuro" aria-pressed="false">☾</button><span class="prototype-tag">PRUEBAS · SOLO LECTURA</span><details class="backup-dropdown">
+          <summary aria-label="Abrir copias de seguridad">▣ Copias <span aria-hidden="true" class="backup-chevron">⌄</span></summary>
+          <section class="backup-panel" aria-label="Protección de datos"><div><strong>Protección de datos</strong><p>Guarda una copia de todas las operaciones y cuentas, incluidas las fotos. Puedes restaurarla más adelante.</p></div><div class="action-group"><button type="button" class="primary" id="exportBackup">Descargar copia</button><button type="button" class="secondary" id="importBackup">Restaurar copia</button><button type="button" class="secondary" id="clearAllPhotos" title="Requiere descargar una copia antes">Eliminar todas las fotos</button><input type="file" id="backupFile" accept=".json,application/json" hidden><button type="button" class="secondary" id="logoutButton">Cerrar sesión</button></div>
+            <div role="group" aria-label="Notificaciones">
+              <strong>Notificaciones</strong>
+              <div class="action-group">
+                <button class="secondary" type="button" id="registerPushButton">Activar avisos automáticos</button>
+                <button class="secondary" type="button" id="testNotificationButton">Probar en este dispositivo</button>
+              </div>
+              <p id="testNotificationResult" role="status"></p>
+            </div>
+          </section>
+        </details></div>
   </header>
   <section id="loginPanel" class="login-panel">
     <div class="login-card"><img class="login-logo" src="logo-azores.jpg" alt="Logo AZORES"><h1>Entrar en AZORES</h1>
@@ -23,30 +36,43 @@
     <button class="primary" type="submit" id="loginButton">Entrar</button></form><p id="loginError" role="alert"></p></div>
   </section>
   <main class="shell" id="appShell" hidden>
-    <div class="cloud-bar"><span id="cloudStatus" role="status">Conectando…</span><div class="action-group"><button type="button" class="secondary" id="retrySync">Reintentar</button><button type="button" class="secondary" id="logoutButton">Cerrar sesión</button></div></div>
+    <div class="cloud-bar" hidden><span id="cloudStatus" role="status">Conectando…</span><div class="action-group"><button type="button" class="secondary" id="retrySync">Reintentar</button></div></div>
     <section class="welcome">
       <div><p class="eyebrow">TU NEGOCIO, EN ORDEN</p><h1>Panel principal</h1><p class="muted">Todo lo importante de AZORES, de un vistazo.</p></div>
-      <button class="primary" id="newProductTop">＋ Añadir producto</button>
+      <div class="welcome-actions">
+        <button class="primary" id="newProductTop">＋ Añadir producto</button>
+      </div>
     </section>
-    <div class="notice"><strong>Datos en Supabase:</strong> comprueba el indicador de sincronización antes de cerrar. Conserva copias JSON periódicas. Si dos dispositivos editan a la vez, el último guardado puede prevalecer.</div>
-    <section class="backup-panel" aria-label="Protección de datos"><div><strong>Protección de datos</strong><p>Guarda una copia de todas las operaciones y cuentas, incluidas las fotos. Puedes restaurarla más adelante.</p></div><div class="action-group"><button type="button" class="primary" id="exportBackup">Descargar copia</button><button type="button" class="secondary" id="importBackup">Restaurar copia</button><input type="file" id="backupFile" accept=".json,application/json" hidden></div></section>
-    <section class="stats" id="stats">
-      <article class="stat"><span>Dinero disponible</span><strong id="cash">0,00 €</strong><small>Saldo conjunto de Vinted</small></article>
-      <article class="stat"><span>Productos en inventario</span><strong id="stock">0</strong><small>Compras aún no vendidas</small></article>
-      <article class="stat"><span>Ventas registradas</span><strong id="sales">0</strong><small>Operaciones vendidas</small></article>
-      <article class="stat"><span>Beneficio generado</span><strong id="profit">0,00 €</strong><small>Reparto 60 % / 40 %</small></article>
+    <div class="az-dashboard-layout" id="azDashboardLayout">
+      <div class="az-left-rail"><section class="az-side-menu"><button type="button" id="azMenuToggle" aria-controls="azSideTabs" aria-expanded="true" aria-label="Plegar menú">☰ <span class="az-nav-label">Menú</span></button><nav class="tabs az-side-tabs" id="azSideTabs" aria-label="Secciones"><button type="button" data-tab="Inicio" title="Inicio" aria-label="Inicio"><span aria-hidden="true" class="az-nav-icon">⌂</span><span class="az-nav-label">Inicio</span></button><button type="button" data-tab="Compras" title="Compras" aria-label="Compras"><span aria-hidden="true" class="az-nav-icon">＋</span><span class="az-nav-label">Compras</span></button><button type="button" data-tab="Inventario" title="Inventario" aria-label="Inventario"><span aria-hidden="true" class="az-nav-icon">▦</span><span class="az-nav-label">Inventario</span></button><button type="button" data-tab="Ventas" title="Ventas" aria-label="Ventas"><span aria-hidden="true" class="az-nav-icon">€</span><span class="az-nav-label">Ventas</span></button><button type="button" data-tab="Envíos" title="Envíos" aria-label="Envíos"><span aria-hidden="true" class="az-nav-icon">↗</span><span class="az-nav-label">Envíos</span></button><button type="button" data-tab="Cuentas" title="Cuentas" aria-label="Cuentas"><span aria-hidden="true" class="az-nav-icon">▤</span><span class="az-nav-label">Cuentas</span></button><button type="button" data-tab="Beneficios" title="Beneficios" aria-label="Beneficios"><span aria-hidden="true" class="az-nav-icon">↗</span><span class="az-nav-label">Beneficios</span></button><button type="button" data-tab="Oportunidades" title="Oportunidades" aria-label="Oportunidades"><span aria-hidden="true" class="az-nav-icon">◎</span><span class="az-nav-label">Oportunidades</span></button></nav></section><aside class="az-calendar" id="azCalendar" aria-label="Calendario de actividad">
+        <div class="az-calendar-head"><strong>📅 Actividad</strong><button type="button" id="azCalendarToggle" class="az-calendar-toggle" aria-expanded="true" aria-controls="azCalendarBody" title="Abrir o cerrar calendario">◀</button></div>
+        <div id="azCalendarBody"><div class="az-month-nav"><button type="button" id="azPrevMonth" aria-label="Mes anterior">‹</button><strong id="azMonthTitle"></strong><button type="button" id="azNextMonth" aria-label="Mes siguiente">›</button></div>
+          <div class="az-calendar-grid" id="azCalendarGrid"></div>
+          <div class="az-calendar-legend"><span><i class="az-dot az-buy"></i> Compras</span><span><i class="az-dot az-sale"></i> Ventas</span><span><i class="az-dot az-ship"></i> Envíos</span><span><i class="az-dot az-paid"></i> Cobros*</span></div>
+          <div class="az-day-activity" id="azDayActivity" aria-live="polite"></div><small class="az-calendar-note">* Envíos y cobros aparecen cuando tienen fecha real registrada.</small>
+        </div>
+      </aside></div>
+      <div class="az-dashboard-main">
+    <section class="home-summary" id="homeSummary" aria-label="Resumen de AZORES">
+      <div class="home-summary-head"><span class="eyebrow">E S T O　 E S　 A Z O R E S</span><h2>El futuro lo construimos nosotros.</h2></div>
+      <article class="home-main-card"><span>Dinero disponible</span><strong id="homeCash">0,00 €</strong><small>Saldo conjunto de las cuentas Vinted</small><div id="cataCelebration" class="cata-celebration" hidden aria-label="CATA celebra que hay dinero disponible"><img src="cata-celebracion.gif" alt="CATA, la mascota pinscher de AZORES, celebra el dinero disponible" width="190" height="193"></div></article>
+      <div class="home-secondary-grid">
+        <article class="home-mini-card"><span>Pendiente de cobro</span><strong id="homePending">0,00 €</strong></article>
+        <article class="home-mini-card"><span>Productos sin vender</span><strong id="homeStock">0</strong></article>
+      </div>
     </section>
+    <section id="azGoals" class="az-goals" aria-label="Objetivos económicos" hidden></section><section id="azRecent" class="az-recent" aria-label="Actividad reciente" hidden></section>
     <section class="content-card">
       <div class="section-heading"><div><p class="eyebrow">GESTIÓN</p><h2 id="sectionTitle">Inventario</h2></div><button class="primary" id="newProduct">＋ Añadir producto</button></div>
-      <nav class="tabs" aria-label="Secciones">
-        <button data-tab="Compras">Compras</button><button class="active" data-tab="Inventario">Inventario</button><button data-tab="Ventas">Ventas</button><button data-tab="Envíos">Envíos</button><button data-tab="Cuentas">Cuentas</button><button data-tab="Beneficios">Beneficios</button><button data-tab="Oportunidades">Oportunidades</button>
-      </nav>
+
       <div id="view"></div>
     </section>
-    <footer>AZORES · PRUEBAS · Comparador V4 · Diseñado para ordenador y móvil</footer>
-  </main>
+      </div>
+    </div>
+    <footer>AZORES · Versión 9.47 PRUEBAS · Diseñado para ordenador y móvil</footer>
+  <nav class="az-mobile-nav" aria-label="Navegación móvil"><button type="button" data-tab="Inicio"><span aria-hidden="true">⌂</span>Inicio</button><button type="button" data-tab="Inventario"><span aria-hidden="true">▦</span>Stock</button><button type="button" data-tab="Ventas"><span aria-hidden="true">€</span>Ventas</button><button type="button" data-tab="Envíos"><span aria-hidden="true">↗</span>Envíos</button><button type="button" id="azMoreToggle" aria-expanded="false" aria-controls="azMoreMenu"><span aria-hidden="true">☰</span>Más</button></nav><div id="azMoreMenu" class="az-more-menu" hidden><button type="button" data-tab="Compras">Compras</button><button type="button" data-tab="Cuentas">Cuentas</button><button type="button" data-tab="Beneficios">Beneficios</button><button type="button" data-tab="Oportunidades">Oportunidades</button></div></main>
   <dialog id="productDialog">
-    <form id="productForm" method="dialog">
+    <form id="productForm" method="post">
       <div class="dialog-head"><div><p class="eyebrow">INVENTARIO</p><h2 id="dialogTitle">Nuevo producto</h2></div><button type="button" class="close" id="closeDialog">×</button></div>
       <label>Nombre o descripción<input name="name" required maxlength="100" placeholder="Ej. Botas Bimani"></label>
       <div class="form-grid">
@@ -59,8 +85,8 @@
       </div>
       <label>Forma de pago<select name="purchaseMethod"><option value="Vinted">Saldo de Vinted</option><option value="Personal">Dinero personal (aportación de capital)</option></select></label>
       <label>Estado del producto<select name="status"><option>Por recibir</option><option>Por subir</option><option selected>Sin vender</option><option>Vendido</option></select></label>
-      <label class="photo-picker">Fotografía del producto <span>(opcional)</span><input name="photo" type="file" accept="image/*" capture="environment"><small>Una foto pequeña para reconocerlo en el inventario.</small></label>
-      <div id="photoPreview" class="photo-preview"></div>
+      <div class="photo-picker"><strong>Fotografía del producto (opcional)</strong><p><button type="button" class="secondary" id="chooseProductPhoto">Seleccionar foto</button></p><input name="photo" type="file" accept="image/*" hidden><input name="photoCamera" type="file" accept="image/*" capture="environment" hidden><small>Se optimiza y se sube a Supabase Storage al guardar.</small></div>
+      <div id="photoPreview" class="photo-preview"></div><button type="button" class="secondary" id="removeProductPhoto" hidden>Eliminar fotografía</button><p id="productFormMessage" role="status" aria-live="polite" style="font-size:.85rem"></p>
       <div class="dialog-actions"><button type="button" class="secondary" id="cancelDialog">Cancelar</button><button type="submit" class="primary" id="saveProductButton">Guardar producto</button></div>
     </form>
   </dialog>
@@ -71,6 +97,7 @@
       <div class="form-grid"><label>Fecha de venta<input type="date" name="saleDate" required></label><label>Precio de venta (€)<input type="number" name="salePrice" min="0" step="0.01" required></label></div>
       <div class="form-grid"><label>Comprador / cuenta<input name="buyer" placeholder="Ej. Usuario Vinted"></label><label>Estado del cobro<select name="paymentStatus"><option>Pendiente de cobro</option><option>Cobrado</option></select></label></div>
       <label>Cuenta Vinted que recibe el cobro<select name="receivingAccount" required><option value="">Seleccionar cuenta</option><option>Aurora</option><option>Pedro</option></select></label>
+      <div class="form-grid"><label>Fecha de envío<input type="date" name="sentAt"></label><label id="paidDateLabel" hidden>Fecha de cobro<input type="date" name="paidAt"></label></div>
       <div class="sale-summary" id="saleSummary">Selecciona un producto e indica el precio de venta.</div>
       <p class="sale-help">El producto dejará de aparecer en el inventario disponible. Podrás editar la venta después.</p>
       <div class="dialog-actions"><button type="button" class="secondary" id="cancelSaleDialog">Cancelar</button><button type="submit" class="primary">Guardar venta</button></div>
@@ -81,8 +108,8 @@
       <div class="dialog-head"><div><p class="eyebrow">ENVÍOS</p><h2>Editar envío</h2></div><button type="button" class="close" id="closeShippingDialog">×</button></div>
       <p id="shippingProductName" class="muted"></p>
       <label>Transportista<input name="carrier" maxlength="80" placeholder="Ej. InPost, Correos, SEUR"></label>
-      <label>Número de seguimiento<input name="trackingNumber" maxlength="120" placeholder="Código del paquete"></label>
       <label>Enlace de seguimiento<input name="trackingUrl" type="url" placeholder="https://..."></label>
+      <label>Fecha real de envío<input type="date" name="sentAt"></label><button type="button" class="secondary" id="markSentToday">Marcar enviado hoy</button>
       <div class="dialog-actions"><button type="button" class="secondary" id="cancelShippingDialog">Cancelar</button><button type="submit" class="primary">Guardar envío</button></div>
     </form>
   </dialog>
