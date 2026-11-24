@@ -126,6 +126,7 @@ function render(){
  stats();$("#sectionTitle").textContent=activeTab;
  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===activeTab));
  const view=$("#view");
+ if(activeTab==="Oportunidades"){renderOportunidades(view);return;}
  if(activeTab==="Compras"||activeTab==="Inventario"){
    const rows=products.filter(p=>activeTab==="Compras"||!isSold(p));
    if(!rows.length){view.innerHTML=`<div class="empty"><div class="symbol">▧</div><h3>${activeTab==="Compras"?"Todavía no hay compras":"Tu inventario está vacío"}</h3><p>Añade el primer producto para empezar a organizar AZORES.</p><button class="primary" id="emptyAdd">＋ Añadir producto</button></div>`;$("#emptyAdd").onclick=()=>openDialog();return}
