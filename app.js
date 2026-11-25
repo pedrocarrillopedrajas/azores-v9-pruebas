@@ -13,7 +13,8 @@ async function refreshCloudSession(){
  cloudSession=j;localStorage.setItem(SESSION_KEY,JSON.stringify(j));return j;
 }
 async function cloudFetch(path,options={}){
- if((options.method||"GET").toUpperCase()!=="GET" && path!=="/functions/v1/azores-comparador-precios")throw Error("Modo pruebas: escritura bloqueada");
+ const method=(options.method||"GET").toUpperCase();
+ if(method!=="GET" && !(method==="POST" && ["/functions/v1/azores-comparador-precios","/functions/v1/azores-precio-oficial"].includes(path)))throw Error("Modo pruebas: escritura bloqueada");
  let r=await fetch(SUPABASE_URL+path,{...options,headers:{...cloudHeaders(cloudSession.access_token),...(options.headers||{})}});
  if(r.status===401){await refreshCloudSession();r=await fetch(SUPABASE_URL+path,{...options,headers:{...cloudHeaders(cloudSession.access_token),...(options.headers||{})}});}
  if(!r.ok){let detail="";try{const j=await r.json();detail=j.message||j.msg||j.error_description||j.error||""}catch(_){}throw Error(detail||"Error de conexión ("+r.status+")");}
