@@ -1,5 +1,5 @@
 // AZORES - caché de aplicación prueba envíos limpios 2026-11-16-1
-const CACHE = "azores-shell-pruebas-v952-20261125-1";
+const CACHE = "azores-shell-pruebas-v953-20261125-1";
 const FILES = ["./", "./index.html", "./styles.css", "./app.js", "./oportunidades.js", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./logo-azores.jpg", "./cata-celebracion.gif"];
 const SCOPE = new URL(self.registration.scope);
 self.addEventListener("install", event => {
@@ -8,7 +8,7 @@ self.addEventListener("install", event => {
 self.addEventListener("activate", event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter(key => key.startsWith("azores-shell-pruebas-v947-") && key !== CACHE).map(key => caches.delete(key)));
+    await Promise.all(keys.filter(key => key.startsWith("azores-shell-pruebas-") && key !== CACHE).map(key => caches.delete(key)));
     await self.clients.claim();
   })());
 });
